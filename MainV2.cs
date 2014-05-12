@@ -1961,6 +1961,13 @@ namespace MissionPlanner
                 frm.Show();
                 return true;
             }
+            if (keyData == (Keys.Control | Keys.M)) // multipilot out
+            {
+                Form frm = new SerialOutputLNMultiPilot();
+                ThemeManager.ApplyThemeTo(frm);
+                frm.Show();
+                return true;
+            }
             if (keyData == (Keys.Control | Keys.L)) // limits
             {
                 Form temp = new Form();

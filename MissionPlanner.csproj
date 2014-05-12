@@ -535,6 +535,12 @@
     <Compile Include="ScriptConsole.Designer.cs">
       <DependentUpon>ScriptConsole.cs</DependentUpon>
     </Compile>
+    <Compile Include="SerialOutputLNMultiPilot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SerialOutputLNMultiPilot.designer.cs">
+      <DependentUpon>SerialOutputLNMultiPilot.cs</DependentUpon>
+    </Compile>
     <Compile Include="Swarm\FollowPathControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -596,6 +602,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Radio\3DRradio.it-IT.resx">
       <DependentUpon>3DRradio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SerialOutputLNMultiPilot.resx">
+      <DependentUpon>SerialOutputLNMultiPilot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Warnings\WarningControl.resx">
       <DependentUpon>WarningControl.cs</DependentUpon>
@@ -6096,6 +6105,10 @@
     <ProjectReference Include="ExtLibs\KMLib\KMLib.csproj">
       <Project>{29976BA4-A04D-4A80-A866-098C879C2FDE}</Project>
       <Name>KMLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="ExtLibs\LNMultiPilot.Library\LNMultiPilot.Library.csproj">
+      <Project>{79edcab0-9669-47d3-9191-adb6dfe704a9}</Project>
+      <Name>LNMultiPilot.Library</Name>
     </ProjectReference>
     <ProjectReference Include="ExtLibs\Mavlink\MAVLink.csproj">
       <Project>{20296734-5f3c-4593-a0d5-dd20b440b13a}</Project>
