@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissionPlanner", "MissionPlanner.csproj", "{A2E22272-95FE-47B6-B050-9AE7E2055BF5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{825E7A10-390C-4A2B-B3A8-491D14966912} = {825E7A10-390C-4A2B-B3A8-491D14966912}
@@ -70,10 +72,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{7E264F12-9EC3-4CDC-A187-6879C2B2BFCF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "px4uploader", "ExtLibs\px4uploader\px4uploader.csproj", "{664FC484-2A94-4B0D-808F-A71F88E06B11}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vrbrainuploader", "ExtLibs\vrbrainuploader\vrbrainuploader.csproj", "{22965957-0B57-4944-982A-D06E002A09BF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fastJSON", "ExtLibs\FastJSON\fastJSON.csproj", "{4ECC68AA-3FCE-4C7F-A479-43FDC59F3226}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LNMultiPilot.Library", "ExtLibs\LNMultiPilot.Library\LNMultiPilot.Library.csproj", "{79EDCAB0-9669-47D3-9191-ADB6DFE704A9}"
 EndProject
