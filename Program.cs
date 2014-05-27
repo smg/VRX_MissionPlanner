@@ -109,14 +109,6 @@ namespace MissionPlanner
             //Utilities.Airports.ReadUNLOCODE(@"C:\Users\hog\Desktop\2013-2 UNLOCODE CodeListPart3.csv");
             //Utilities.Airports.ReadPartow(@"C:\Users\hog\Desktop\GlobalAirportDatabase.txt");
 
-            try
-            {
-
-                Utilities.Airports.ReadOurairports(Application.StartupPath + Path.DirectorySeparatorChar + "airports.csv");
-
-            }
-            catch { }
-
 
             /*
             Arduino.ArduinoSTKv2 comport = new Arduino.ArduinoSTKv2();

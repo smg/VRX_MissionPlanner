@@ -23,9 +23,8 @@
 
 3. Build
 
-- Open ArdupilotMega.sln with Visual Studio 2010-2013
-- Follow compile1.jpg in the code tree
-- apply compile1.jpg to all problem projects.
+- Open ArdupilotMega.sln with Visual Studio express 2013 for windows desktop.
+- Compile.
 
 
 -----------MONO-------------
@@ -36,5 +35,5 @@ run debuging
 MONO_LOG_LEVEL=debug mono MissionPlanner.exe
 
 you need prereq's
-sudo apt-get install mono-runtime libmono-system-windows-forms4.0-cil libmono-system-core4.0-cil libmono-winforms2.0-cil libmono-corlib2.0-cil libmono-system-management4.0-cil
+sudo apt-get install mono-runtime libmono-system-windows-forms4.0-cil libmono-system-core4.0-cil libmono-winforms2.0-cil libmono-corlib2.0-cil libmono-system-management4.0-cil libmono-system-xml-linq4.0-cil
 

@@ -108,6 +108,8 @@ namespace MissionPlanner
             }
         }
 
+        public static bool ShowAirports { get; set; }
+
         public static event EventHandler AdvancedChanged;
 
         /// <summary>
@@ -263,6 +265,8 @@ namespace MissionPlanner
         {
             log.Info("Mainv2 ctor");
 
+            ShowAirports = true;
+
             Form splash = Program.Splash;
 
             splash.Refresh();
@@ -392,6 +396,11 @@ namespace MissionPlanner
                     }
                     catch { log.Error("Bad Custom theme - reset to standard"); ThemeManager.SetTheme(ThemeManager.Themes.BurntKermit); }
                 }
+            }
+
+            if (MainV2.config["showairports"] != null)
+            {
+                MainV2.ShowAirports = bool.Parse(config["showairports"].ToString());
             }
 
             // load this before the other screens get loaded
@@ -573,6 +582,22 @@ namespace MissionPlanner
 
 
 
+        }
+
+        private void BGLoadAirports(object nothing)
+        {
+            // read airport list
+            try
+            {
+                Utilities.Airports.ReadOurairports(Application.StartupPath + Path.DirectorySeparatorChar + "airports.csv");
+
+                Utilities.Airports.checkdups = true;
+
+                Utilities.Airports.ReadOpenflights(Application.StartupPath + Path.DirectorySeparatorChar + "airports.dat");
+
+                log.Info("Loaded " + Utilities.Airports.GetAirportCount + " airports");
+            }
+            catch { }
         }
 
         void POIs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -1773,6 +1798,8 @@ namespace MissionPlanner
             };
             pluginthread.Start();
 
+            ThreadPool.QueueUserWorkItem(BGLoadAirports);
+
             Program.Splash.Close();
 
             try
@@ -1957,13 +1984,6 @@ namespace MissionPlanner
             if (keyData == (Keys.Control | Keys.G)) // nmea out
             {
                 Form frm = new SerialOutputNMEA();
-                ThemeManager.ApplyThemeTo(frm);
-                frm.Show();
-                return true;
-            }
-            if (keyData == (Keys.Control | Keys.M)) // multipilot out
-            {
-                Form frm = new SerialOutputLNMultiPilot();
                 ThemeManager.ApplyThemeTo(frm);
                 frm.Show();
                 return true;
@@ -2541,5 +2561,12 @@ namespace MissionPlanner
                 this.WindowState = FormWindowState.Maximized;
             }
         }
+
+        private void readonlyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MainV2.comPort.ReadOnly = readonlyToolStripMenuItem.Checked;
+        }
+
+     
     }
 }

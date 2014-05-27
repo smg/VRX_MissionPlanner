@@ -40,6 +40,8 @@ namespace MissionPlanner
         internal string plaintxtline = "";
         string buildplaintxtline = "";
 
+        public bool ReadOnly = false;
+
         public event ProgressEventHandler Progress;
 
         public MAVState MAV = new MAVState();
@@ -316,7 +318,7 @@ namespace MissionPlanner
             giveComport = true;
 
             // allow settings to settle - previous dtr 
-            System.Threading.Thread.Sleep(500);
+            System.Threading.Thread.Sleep(1000);
 
             // reset
             MAV.sysid = 0;
@@ -551,6 +553,26 @@ Please check the following
             if (!BaseStream.IsOpen)
             {
                 return;
+            }
+
+            if (ReadOnly) 
+            {
+                // allow these messages
+                if (messageType == (byte)MAVLink.MAVLINK_MSG_ID.MISSION_REQUEST_LIST || 
+                    messageType == (byte)MAVLink.MAVLINK_MSG_ID.MISSION_REQUEST_PARTIAL_LIST ||
+                    messageType == (byte)MAVLink.MAVLINK_MSG_ID.MISSION_REQUEST ||
+                    messageType == (byte)MAVLink.MAVLINK_MSG_ID.PARAM_REQUEST_LIST || 
+                    messageType == (byte)MAVLink.MAVLINK_MSG_ID.PARAM_REQUEST_READ ||
+                    messageType == (byte)MAVLink.MAVLINK_MSG_ID.RALLY_FETCH_POINT ||
+                    messageType == (byte)MAVLink.MAVLINK_MSG_ID.FENCE_FETCH_POINT
+                    )
+                {
+
+                }
+                else 
+                {
+                    return;
+                }                
             }
 
             lock (objlock)
@@ -2054,6 +2076,11 @@ Please check the following
             {
                 gotohere.id = (byte)MAV_CMD.WAYPOINT;
 
+                int fixme;
+                // fix for followme change
+                if (MAV.cs.mode.ToUpper() != "GUIDED")
+                    setMode("GUIDED");
+
                 MAV_MISSION_RESULT ans = setWP(gotohere, 0, MAVLink.MAV_FRAME.GLOBAL_RELATIVE_ALT, (byte)2);
 
                 if (ans != MAV_MISSION_RESULT.MAV_MISSION_ACCEPTED)
@@ -3069,7 +3096,7 @@ Please check the following
             {
                 try
                 {
-                    PointLatLngAlt plla = MainV2.comPort.getRallyPoint(a, ref count);
+                    PointLatLngAlt plla = getRallyPoint(a, ref count);
                     points.Add(plla);
                 }
                 catch { return points; }

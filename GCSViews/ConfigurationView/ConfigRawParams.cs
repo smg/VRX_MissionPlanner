@@ -452,22 +452,30 @@ namespace MissionPlanner.GCSViews.ConfigurationView
         {
             string filepath = Application.StartupPath + Path.DirectorySeparatorChar + CMB_paramfiles.Text;
 
-            byte[] data = GitHubContent.GetFileContent("diydrones", "ardupilot", ((GitHubContent.FileInfo)CMB_paramfiles.SelectedValue).path);
-
-            File.WriteAllBytes(filepath, data);
-
-            Hashtable param2 = Utilities.ParamFile.loadParamFile(filepath);
-
-            Form paramCompareForm = new ParamCompare(Params, MainV2.comPort.MAV.param, param2);
-
-            ThemeManager.ApplyThemeTo(paramCompareForm);
-            if (paramCompareForm.ShowDialog() == DialogResult.OK)
+            try
             {
-                CustomMessageBox.Show("Loaded parameters, please make sure you write them!", "Loaded");
-            }
 
-            // no activate the user needs to click write.
-            //this.Activate();
+                byte[] data = GitHubContent.GetFileContent("diydrones", "ardupilot", ((GitHubContent.FileInfo)CMB_paramfiles.SelectedValue).path);
+
+                File.WriteAllBytes(filepath, data);
+
+                Hashtable param2 = Utilities.ParamFile.loadParamFile(filepath);
+
+                Form paramCompareForm = new ParamCompare(Params, MainV2.comPort.MAV.param, param2);
+
+                ThemeManager.ApplyThemeTo(paramCompareForm);
+                if (paramCompareForm.ShowDialog() == DialogResult.OK)
+                {
+                    CustomMessageBox.Show("Loaded parameters, please make sure you write them!", "Loaded");
+                }
+
+                // no activate the user needs to click write.
+                //this.Activate();
+            }
+            catch (Exception ex) 
+            { 
+                CustomMessageBox.Show("Failed to load file.\n" + ex);
+            }
         }
 
         private void CMB_paramfiles_SelectedIndexChanged(object sender, EventArgs e)
@@ -479,8 +487,8 @@ namespace MissionPlanner.GCSViews.ConfigurationView
         {
             if (CustomMessageBox.Show("Reset all parameters to default\nAre you sure!!", "Reset", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                MainV2.comPort.setParam("FORMAT_VERSION", 0);
-                System.Threading.Thread.Sleep(100);
+                MainV2.comPort.setParam(new string[] {"FORMAT_VERSION","SYSID_SW_MREV"}, 0);
+                System.Threading.Thread.Sleep(1000);
                 MainV2.comPort.doReboot(false);
                 MainV2.comPort.BaseStream.Close();
 
