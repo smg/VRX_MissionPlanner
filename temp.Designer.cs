@@ -71,6 +71,11 @@
             this.button3 = new System.Windows.Forms.Button();
             this.BUT_magfit2 = new MissionPlanner.Controls.MyButton();
             this.BUT_shptopoly = new MissionPlanner.Controls.MyButton();
+            this.but_droneshare = new MissionPlanner.Controls.MyButton();
+            this.but_gimbaltest = new MissionPlanner.Controls.MyButton();
+            this.but_mntstatus = new MissionPlanner.Controls.MyButton();
+            this.but_maplogs = new MissionPlanner.Controls.MyButton();
+            this.butlogindex = new MissionPlanner.Controls.MyButton();
             this.SuspendLayout();
             // 
             // label1
@@ -456,9 +461,9 @@
             // 
             this.button3.Location = new System.Drawing.Point(429, 338);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.Size = new System.Drawing.Size(107, 23);
             this.button3.TabIndex = 44;
-            this.button3.Text = "button3";
+            this.button3.Text = "Warning Manager";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -482,11 +487,66 @@
             this.BUT_shptopoly.UseVisualStyleBackColor = true;
             this.BUT_shptopoly.Click += new System.EventHandler(this.BUT_shptopoly_Click);
             // 
+            // but_droneshare
+            // 
+            this.but_droneshare.Location = new System.Drawing.Point(324, 380);
+            this.but_droneshare.Name = "but_droneshare";
+            this.but_droneshare.Size = new System.Drawing.Size(75, 23);
+            this.but_droneshare.TabIndex = 47;
+            this.but_droneshare.Text = "test droneshare";
+            this.but_droneshare.UseVisualStyleBackColor = true;
+            this.but_droneshare.Click += new System.EventHandler(this.but_droneshare_Click);
+            // 
+            // but_gimbaltest
+            // 
+            this.but_gimbaltest.Location = new System.Drawing.Point(324, 351);
+            this.but_gimbaltest.Name = "but_gimbaltest";
+            this.but_gimbaltest.Size = new System.Drawing.Size(75, 23);
+            this.but_gimbaltest.TabIndex = 48;
+            this.but_gimbaltest.Text = "gimbal test";
+            this.but_gimbaltest.UseVisualStyleBackColor = true;
+            this.but_gimbaltest.Click += new System.EventHandler(this.but_gimbaltest_Click);
+            // 
+            // but_mntstatus
+            // 
+            this.but_mntstatus.Location = new System.Drawing.Point(227, 389);
+            this.but_mntstatus.Name = "but_mntstatus";
+            this.but_mntstatus.Size = new System.Drawing.Size(75, 23);
+            this.but_mntstatus.TabIndex = 49;
+            this.but_mntstatus.Text = "mount status msg";
+            this.but_mntstatus.UseVisualStyleBackColor = true;
+            this.but_mntstatus.Click += new System.EventHandler(this.but_mntstatus_Click);
+            // 
+            // but_maplogs
+            // 
+            this.but_maplogs.Location = new System.Drawing.Point(12, 380);
+            this.but_maplogs.Name = "but_maplogs";
+            this.but_maplogs.Size = new System.Drawing.Size(75, 23);
+            this.but_maplogs.TabIndex = 50;
+            this.but_maplogs.Text = "map logs";
+            this.but_maplogs.UseVisualStyleBackColor = true;
+            this.but_maplogs.Click += new System.EventHandler(this.but_maplogs_Click);
+            // 
+            // butlogindex
+            // 
+            this.butlogindex.Location = new System.Drawing.Point(12, 415);
+            this.butlogindex.Name = "butlogindex";
+            this.butlogindex.Size = new System.Drawing.Size(75, 23);
+            this.butlogindex.TabIndex = 51;
+            this.butlogindex.Text = "logindex";
+            this.butlogindex.UseVisualStyleBackColor = true;
+            this.butlogindex.Click += new System.EventHandler(this.butlogindex_Click);
+            // 
             // temp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(685, 450);
+            this.Controls.Add(this.butlogindex);
+            this.Controls.Add(this.but_maplogs);
+            this.Controls.Add(this.but_mntstatus);
+            this.Controls.Add(this.but_gimbaltest);
+            this.Controls.Add(this.but_droneshare);
             this.Controls.Add(this.BUT_shptopoly);
             this.Controls.Add(this.BUT_magfit2);
             this.Controls.Add(this.button3);
@@ -580,5 +640,10 @@
         System.Windows.Forms.Button button3;
         private Controls.MyButton BUT_magfit2;
         private Controls.MyButton BUT_shptopoly;
+        private Controls.MyButton but_droneshare;
+        private Controls.MyButton but_gimbaltest;
+        private Controls.MyButton but_mntstatus;
+        private Controls.MyButton but_maplogs;
+        private Controls.MyButton butlogindex;
     }
 }

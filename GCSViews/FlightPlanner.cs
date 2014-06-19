@@ -59,6 +59,20 @@ namespace MissionPlanner.GCSViews
         private Dictionary<string, string[]> cmdParamNames = new Dictionary<string, string[]>();
 
 
+        private void poieditToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            POI.POIEdit(CurrentGMapMarker.Position);
+        }
+
+        private void poideleteToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            POI.POIDelete(CurrentGMapMarker.Position);
+        }
+
+        private void poiaddToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            POI.POIAdd(MouseDownStart);
+        }
 
         /// <summary>
         /// used to adjust existing point in the datagrid including "Home"
@@ -180,7 +194,7 @@ namespace MissionPlanner.GCSViews
                     if (ans == 0 && (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2))
                         cell.Value = 15;
                     //   online          verify height using google
-                    if (isonline && CHK_geheight.Checked)
+                  /*  if (isonline && CHK_geheight.Checked)
                     {
                         if (CHK_altmode.Checked)
                         {
@@ -193,7 +207,7 @@ namespace MissionPlanner.GCSViews
                             cell.Value = ((int)getGEAlt(lat, lng) + int.Parse(TXT_DefaultAlt.Text) - (int)getGEAlt(MainV2.comPort.MAV.cs.HomeLocation.Lat, MainV2.comPort.MAV.cs.HomeLocation.Lng)).ToString();
                         }
                     }
-                    else
+                    else*/
                     {
                         // not online and verify alt via srtm
                         if (CHK_geheight.Checked) // use srtm data
@@ -584,6 +598,8 @@ namespace MissionPlanner.GCSViews
 
             quickadd = false;
 
+            POI.POIModified += POI_POIModified;
+
             if (MainV2.config["WMSserver"] != null)
                 Maps.WMSProvider.CustomWMSURL = MainV2.config["WMSserver"].ToString();
 
@@ -629,6 +645,11 @@ namespace MissionPlanner.GCSViews
             }
 
             timer1.Start();
+        }
+
+        void POI_POIModified(object sender, EventArgs e)
+        {
+            POI.UpdateOverlay(poioverlay);
         }
 
         void parser_ElementAdded(object sender, SharpKml.Base.ElementEventArgs e)
@@ -5505,55 +5526,6 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
         private void prefetchWPPathToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FetchPath();
-        }
-
-        private void poiaddToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PointLatLngAlt pnt = MouseDownStart;
-
-            string output = "";
-
-            if (DialogResult.OK != InputBox.Show("POI", "Enter ID", ref output))
-                return;
-
-            pnt.Tag = output;
-
-            MainV2.POIs.Add(pnt);
-
-            poioverlay.Markers.Add(new GMarkerGoogle(pnt, GMarkerGoogleType.red_dot) { ToolTipMode = MarkerTooltipMode.OnMouseOver, ToolTipText = pnt.Tag });
-        }
-
-        private void poideleteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            poioverlay.Markers.Remove(CurrentGMapMarker);
-
-            for (int a = 0; a < MainV2.POIs.Count; a++)
-            {
-                if (MainV2.POIs[a].Point() == CurrentGMapMarker.Position)
-                {
-                    MainV2.POIs.RemoveAt(a);
-                    return;
-                }
-            }
-        }
-
-        private void poieditToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string output = "";
-
-            if (DialogResult.OK != InputBox.Show("POI", "Enter ID", ref output))
-                return;
-
-            for (int a = 0; a < MainV2.POIs.Count; a++)
-            {
-                if (MainV2.POIs[a].Point() == CurrentGMapMarker.Position)
-                {
-                    MainV2.POIs[a].Tag = output;
-                    CurrentGMapMarker.ToolTipText = output;
-                    MainMap.Invalidate();
-                    return;
-                }
-            }
         }
 
         static string zone = "50s";

@@ -132,11 +132,6 @@ namespace MissionPlanner
         public Hashtable adsbPlaneAge = new Hashtable();
 
         /// <summary>
-        /// Store points of interest
-        /// </summary>
-        public static ObservableCollection<PointLatLngAlt> POIs = new ObservableCollection<PointLatLngAlt>();
-
-        /// <summary>
         /// Comport name
         /// </summary>
         public static string comPortName = "";
@@ -280,8 +275,6 @@ namespace MissionPlanner
             MyView = new MainSwitcher(this);
 
             View = MyView;
-
-            POIs.CollectionChanged += POIs_CollectionChanged;
 
             AdvancedChanged += updateAdvanced;
 
@@ -571,6 +564,7 @@ namespace MissionPlanner
 
             // setup adsb
             Utilities.adsb.UpdatePlanePosition += adsb_UpdatePlanePosition;
+
             new Utilities.adsb();
 
             //int fixmenextrelease;
@@ -598,11 +592,6 @@ namespace MissionPlanner
                 log.Info("Loaded " + Utilities.Airports.GetAirportCount + " airports");
             }
             catch { }
-        }
-
-        void POIs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-
         }
 
         void MenuCustom_Click(object sender, EventArgs e)
@@ -1805,6 +1794,8 @@ namespace MissionPlanner
 
             ThreadPool.QueueUserWorkItem(BGLoadAirports);
 
+            ThreadPool.QueueUserWorkItem(BGCreateMaps);
+
             Program.Splash.Close();
 
             try
@@ -1902,6 +1893,11 @@ namespace MissionPlanner
                 config["newuser"] = DateTime.Now.ToShortDateString();
             }
             */
+        }
+
+        private void BGCreateMaps(object state)
+        {
+            Log.LogMap.MapLogs(Directory.GetFiles(MainV2.LogDir, "*.tlog", SearchOption.AllDirectories));
         }
 
         private void checkupdate(object stuff)

@@ -111,12 +111,32 @@ namespace MissionPlanner.GCSViews
         //whether or not the output console has already started
         bool outputwindowstarted = false;
 
+
+        private void deleteToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            POI.POIDelete(CurrentGMapMarker.Position);
+        }
+
+        private void addPoiToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            POI.POIAdd(MouseDownStart);
+        }
+
+        private void saveFileToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            POI.POISave();
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
 
             threadrun = 0;
             MainV2.comPort.logreadmode = false;
+            // this should make the current pending invokes run
+            System.Threading.Thread.Sleep(100);
+            Application.DoEvents();
             try
             {
                 if (hud1 != null)
@@ -582,6 +602,8 @@ namespace MissionPlanner.GCSViews
         {
             System.Threading.ThreadPool.QueueUserWorkItem(mainloop);
 
+            POI.POIModified += POI_POIModified;
+
             TRK_zoom.Minimum = gMapControl1.MapProvider.MinZoom;
             TRK_zoom.Maximum = (float)24;
             TRK_zoom.Value = (float)gMapControl1.Zoom;
@@ -610,6 +632,11 @@ namespace MissionPlanner.GCSViews
             }
 
             hud1.doResize();
+        }
+
+        void POI_POIModified(object sender, EventArgs e)
+        {
+            POI.UpdateOverlay(poioverlay);
         }
 
         private void mainloop(object o)
@@ -1076,6 +1103,20 @@ namespace MissionPlanner.GCSViews
                             {
                                 routes.Markers.Add(new GMarkerGoogle(currentloc, GMarkerGoogleType.blue_dot) { Position = MainV2.comPort.MAV.cs.MovingBase, ToolTipText = "Moving Base", ToolTipMode = MarkerTooltipMode.OnMouseOver });
                             }
+
+
+                            // for testing
+                            try
+                            {
+                                int testing;
+                                int fixme;
+                                var marker = MissionPlanner.Utilities.GimbalPoint.ProjectPoint();
+
+                                MainV2.comPort.MAV.cs.GimbalPoint = marker;
+
+                                routes.Markers.Add(new GMarkerGoogle(marker, GMarkerGoogleType.blue_dot) { ToolTipText = "Camera Target\n"+marker.ToString(), ToolTipMode = MarkerTooltipMode.OnMouseOver });
+                            }
+                            catch { }
 
                             lock(MainV2.instance.adsbPlanes) 
                             {
@@ -3119,11 +3160,30 @@ namespace MissionPlanner.GCSViews
         private void BUT_loganalysis_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "*.log|*.log";
+            ofd.Filter = "*.log|*.log|*.bin|*.bin";
             ofd.ShowDialog();
 
             if (ofd.FileName != "")
             {
+                string newlogfile = null;
+
+                if (ofd.FileName.ToLower().EndsWith(".bin"))
+                {
+                    var log = MissionPlanner.Log.BinaryLog.ReadLog(ofd.FileName);
+
+                    newlogfile = Path.GetTempPath() + Path.DirectorySeparatorChar + Path.GetTempFileName() + ".log";
+
+                    using (StreamWriter sw = new StreamWriter(newlogfile))
+                    {
+                        foreach (string line in log)
+                        {
+                            sw.Write(line);
+                        }
+                    }
+
+                    ofd.FileName = newlogfile;
+                }
+
                 string xmlfile = MissionPlanner.Utilities.LogAnalyzer.CheckLogFile(ofd.FileName);
 
                 if (File.Exists(xmlfile))
@@ -3138,40 +3198,13 @@ namespace MissionPlanner.GCSViews
                 {
                     CustomMessageBox.Show("Bad input file");
                 }
-            }
-        }
 
-        private void addPoiToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PointLatLngAlt pnt = MouseDownStart;
-
-            string output = "";
-
-            if (DialogResult.OK != InputBox.Show("POI", "Enter ID", ref output))
-                return;
-
-            pnt.Tag = output + " "+ pnt.ToString();
-
-            MainV2.POIs.Add(pnt);
-
-            poioverlay.Markers.Add(new GMarkerGoogle(pnt, GMarkerGoogleType.red_dot) { ToolTipMode = MarkerTooltipMode.OnMouseOver, ToolTipText = pnt.Tag });
-       
-        }
-
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            poioverlay.Markers.Remove(CurrentGMapMarker);
-
-            if (CurrentGMapMarker != null) {
-                for (int a = 0; a < MainV2.POIs.Count; a++)
+                if (newlogfile != "")
                 {
-                    if (MainV2.POIs[a].Point() == CurrentGMapMarker.Position)
-                    {
-                        MainV2.POIs.RemoveAt(a);
-                        return;
-                    }
+                    File.Delete(newlogfile);
                 }
             }
         }
+
     }
 }
